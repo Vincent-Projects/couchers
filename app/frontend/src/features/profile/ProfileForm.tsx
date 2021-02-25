@@ -104,7 +104,7 @@ export default function EditProfileForm() {
                     name={"image"}
                     src={value}
                     onChange={async (values) => {
-                      setValue("avatarUrl", values.thumbnailUrl);
+                      setValue("avatarUrl", values.thumbnail_url);
                     }}
                   />
                 );
