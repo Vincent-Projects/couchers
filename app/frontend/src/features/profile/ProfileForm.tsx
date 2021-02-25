@@ -104,10 +104,10 @@ export default function EditProfileForm() {
                       name={'image'}
                       src={value}
                       onChange={async (file) => {
+                          // TODO move media endpoint to config
                         const response = await service.api.uploadFile(file);
-                        // TODO replace with correct image url
-                        const avatarUrl = 'https://via.placeholder.com/150?key=' + response.key;
-                        setValue('avatarUrl',avatarUrl)
+                        const thumbnailUrl = 'https://dev-user-media.coucher.org/media/img/avatar/' + response.key + '.jpg';
+                        setValue('avatarUrl',thumbnailUrl)
                       }}
                   />
                 }}
