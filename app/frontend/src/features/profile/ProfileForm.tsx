@@ -56,6 +56,7 @@ export default function EditProfileForm() {
     isMounted,
     null
   );
+
   const {
     control,
     register,
@@ -67,7 +68,8 @@ export default function EditProfileForm() {
       lat: user?.lat ?? undefined,
       lng: user?.lng ?? undefined,
       radius: user?.radius ?? undefined,
-      // avatarUrl: user?.avatarUrl ?? undefined,
+      avatarUrl: user?.avatarUrl ?? undefined,
+      avatarKey: undefined,
     },
   });
 
@@ -105,6 +107,7 @@ export default function EditProfileForm() {
                     src={value}
                     onChange={async (values) => {
                       setValue("avatarUrl", values.thumbnail_url);
+                      setValue("avatarKey", values.key);
                     }}
                   />
                 );
