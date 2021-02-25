@@ -1,13 +1,14 @@
-import { Box, makeStyles } from "@material-ui/core";
-import React, { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import {Box, makeStyles} from "@material-ui/core";
+import React, {useEffect} from "react";
+import {Controller, useForm} from "react-hook-form";
 
 import Alert from "../../components/Alert";
+import AvatarInput from "../../components/AvatarInput";
 import Button from "../../components/Button";
 import CircularProgress from "../../components/CircularProgress";
 import EditUserLocationMap from "../../components/EditUserLocationMap";
-import { UpdateUserProfileData } from "../../service/user";
-import { useIsMounted, useSafeState } from "../../utils/hooks";
+import {service, UpdateUserProfileData} from "../../service";
+import {useIsMounted, useSafeState} from "../../utils/hooks";
 import useCurrentUser from "../userQueries/useCurrentUser";
 import ProfileMarkdownInput from "./ProfileMarkdownInput";
 import ProfileTagInput from "./ProfileTagInput";
@@ -62,8 +63,10 @@ export default function EditProfileForm() {
       lat: user?.lat ?? undefined,
       lng: user?.lng ?? undefined,
       radius: user?.radius ?? undefined,
+      // avatarUrl: user?.avatarUrl ?? undefined,
     },
   });
+
 
   useEffect(() => {
     //register here because these don't exist as actual fields
@@ -77,6 +80,9 @@ export default function EditProfileForm() {
     updateUserProfile({ profileData: data, setMutationError: setErrorMessage });
   });
 
+
+
+
   return (
     <>
       {updateStatus === "success" ? (
@@ -87,12 +93,34 @@ export default function EditProfileForm() {
       {user ? (
         <>
           <form onSubmit={onSubmit}>
+
+
+            <Controller
+                name={'avatarUrl'}
+                control={control}
+                render={({value}) => {
+                  return <AvatarInput
+                      id={'profile-picture'}
+                      name={'image'}
+                      src={value}
+                      onChange={async (file) => {
+                        const response = await service.api.uploadFile(file);
+                        // TODO replace with correct image url
+                        const avatarUrl = 'https://via.placeholder.com/150?key=' + response.key;
+                        setValue('avatarUrl',avatarUrl)
+                      }}
+                  />
+                }}
+            />
+
+
             <ProfileTextInput
               label="Name"
               name="name"
               defaultValue={user.name}
               inputRef={register}
               className={classes.field}
+              variant={'standard'}
             />
           </form>
           <Controller
@@ -118,6 +146,7 @@ export default function EditProfileForm() {
               defaultValue={user.gender}
               inputRef={register}
               className={classes.field}
+              variant={'standard'}
             />
             <ProfileTextInput
               label="Occupation"
@@ -125,6 +154,7 @@ export default function EditProfileForm() {
               defaultValue={user.occupation}
               inputRef={register}
               className={classes.field}
+              variant={'standard'}
             />
 
             <Controller
