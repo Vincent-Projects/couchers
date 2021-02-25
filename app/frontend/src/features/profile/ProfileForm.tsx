@@ -1,14 +1,14 @@
-import {Box, makeStyles} from "@material-ui/core";
-import React, {useEffect} from "react";
-import {Controller, useForm} from "react-hook-form";
+import { Box, makeStyles } from "@material-ui/core";
+import React, { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 import Alert from "../../components/Alert";
 import AvatarInput from "../../components/AvatarInput";
 import Button from "../../components/Button";
 import CircularProgress from "../../components/CircularProgress";
 import EditUserLocationMap from "../../components/EditUserLocationMap";
-import {service, UpdateUserProfileData} from "../../service";
-import {useIsMounted, useSafeState} from "../../utils/hooks";
+import { UpdateUserProfileData } from "../../service";
+import { useIsMounted, useSafeState } from "../../utils/hooks";
 import useCurrentUser from "../userQueries/useCurrentUser";
 import ProfileMarkdownInput from "./ProfileMarkdownInput";
 import ProfileTagInput from "./ProfileTagInput";
@@ -36,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: {
       width: 400,
     },
+  },
+  avatar: {
+    width: 120,
+    height: 120,
   },
 }));
 
@@ -67,7 +71,6 @@ export default function EditProfileForm() {
     },
   });
 
-
   useEffect(() => {
     //register here because these don't exist as actual fields
     register("lat");
@@ -80,9 +83,6 @@ export default function EditProfileForm() {
     updateUserProfile({ profileData: data, setMutationError: setErrorMessage });
   });
 
-
-
-
   return (
     <>
       {updateStatus === "success" ? (
@@ -93,26 +93,23 @@ export default function EditProfileForm() {
       {user ? (
         <>
           <form onSubmit={onSubmit}>
-
-
             <Controller
-                name={'avatarUrl'}
-                control={control}
-                render={({value}) => {
-                  return <AvatarInput
-                      id={'profile-picture'}
-                      name={'image'}
-                      src={value}
-                      onChange={async (file) => {
-                          // TODO move media endpoint to config
-                        const response = await service.api.uploadFile(file);
-                        const thumbnailUrl = 'https://dev-user-media.coucher.org/media/img/avatar/' + response.key + '.jpg';
-                        setValue('avatarUrl',thumbnailUrl)
-                      }}
+              name={"avatarUrl"}
+              control={control}
+              render={({ value }) => {
+                return (
+                  <AvatarInput
+                    className={classes.avatar}
+                    id={"profile-picture"}
+                    name={"image"}
+                    src={value}
+                    onChange={async (values) => {
+                      setValue("avatarUrl", values.thumbnailUrl);
+                    }}
                   />
-                }}
+                );
+              }}
             />
-
 
             <ProfileTextInput
               label="Name"
@@ -120,7 +117,7 @@ export default function EditProfileForm() {
               defaultValue={user.name}
               inputRef={register}
               className={classes.field}
-              variant={'standard'}
+              variant={"standard"}
             />
           </form>
           <Controller
@@ -146,7 +143,7 @@ export default function EditProfileForm() {
               defaultValue={user.gender}
               inputRef={register}
               className={classes.field}
-              variant={'standard'}
+              variant={"standard"}
             />
             <ProfileTextInput
               label="Occupation"
@@ -154,7 +151,7 @@ export default function EditProfileForm() {
               defaultValue={user.occupation}
               inputRef={register}
               className={classes.field}
-              variant={'standard'}
+              variant={"standard"}
             />
 
             <Controller
