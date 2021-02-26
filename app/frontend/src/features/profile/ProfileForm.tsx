@@ -68,7 +68,6 @@ export default function EditProfileForm() {
       lat: user?.lat ?? undefined,
       lng: user?.lng ?? undefined,
       radius: user?.radius ?? undefined,
-      avatarUrl: user?.avatarUrl ?? undefined,
       avatarKey: undefined,
     },
   });
@@ -98,17 +97,15 @@ export default function EditProfileForm() {
             <Controller
               name={"avatarUrl"}
               control={control}
-              render={({ value }) => {
+              render={({ onChange }) => {
                 return (
                   <AvatarInput
                     className={classes.avatar}
                     id={"profile-picture"}
-                    name={"image"}
-                    src={value}
-                    onChange={async (values) => {
-                      setValue("avatarUrl", values.thumbnail_url);
-                      setValue("avatarKey", values.key);
-                    }}
+                    name={"avatarKey"}
+                    src={user?.avatarUrl}
+                    username={user?.name}
+                    onChange={onChange}
                   />
                 );
               }}
