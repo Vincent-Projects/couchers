@@ -95,7 +95,7 @@ export default function EditProfileForm() {
         <>
           <form onSubmit={onSubmit}>
             <Controller
-              name={"avatarUrl"}
+              name={"avatarKey"}
               control={control}
               render={({ onChange }) => {
                 return (
