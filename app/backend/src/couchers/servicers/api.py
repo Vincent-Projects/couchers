@@ -204,13 +204,15 @@ class API(api_pb2_grpc.APIServicer):
                 user.hometown = request.hometown.value
 
             if request.HasField("lat") and request.HasField("lng"):
+                if request.lat.value == 0 and request.lng.value == 0:
+                    context.abort(grpc.StatusCode.INVALID_ARGUMENT, errors.INVALID_COORDINATE)
                 user.geom = create_coordinate(request.lat.value, request.lng.value)
 
             if request.HasField("radius"):
                 user.geom_radius = request.radius.value
 
             if request.HasField("avatar_key"):
-                user.avatar = request.avatar_key.value
+                user.avatar_key = request.avatar_key.value
 
             if request.HasField("gender"):
                 user.gender = request.gender.value
@@ -646,12 +648,13 @@ class API(api_pb2_grpc.APIServicer):
 
 def paginate_references_result(request, query):
     total_matches = query.count()
-    references = query.order_by(Reference.time).offset(request.start_at).limit(request.number).all()
+    references = query.order_by(Reference.time.desc()).offset(request.start_at).limit(request.number).all()
     # order by time, pagination
     return api_pb2.GetReferencesRes(
         total_matches=total_matches,
         references=[
             api_pb2.Reference(
+                reference_id=reference.id,
                 from_user_id=reference.from_user_id,
                 to_user_id=reference.to_user_id,
                 reference_type=reftype2api[reference.reference_type],

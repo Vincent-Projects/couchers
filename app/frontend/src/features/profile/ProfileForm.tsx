@@ -89,7 +89,7 @@ export default function EditProfileForm() {
       {updateStatus === "success" ? (
         <Alert severity="success">Successfully updated profile!</Alert>
       ) : updateStatus === "error" ? (
-        <Alert severity="error">{errorMessage}</Alert>
+        <Alert severity="error">{errorMessage ?? ""}</Alert>
       ) : null}
       {user ? (
         <>

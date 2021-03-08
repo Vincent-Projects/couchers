@@ -1,39 +1,43 @@
 import "maplibre-gl/dist/mapbox-gl.css";
 
-import { Box, BoxProps, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import classNames from "classnames";
 import mapboxgl, { LngLat, RequestParameters } from "maplibre-gl";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const URL = process.env.REACT_APP_API_BASE_URL;
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY!;
 
 const useStyles = makeStyles({
-  root: {
-    position: "relative",
-    height: 200,
-    width: 400,
-  },
   grow: {
-    width: "100%",
-    height: "100%",
+    "div&": {
+      height: "100%",
+      width: "100%",
+    },
   },
   map: {
+    height: "100%",
+    left: 0,
     position: "absolute",
     top: 0,
-    left: 0,
     width: "100%",
-    height: "100%",
+  },
+  root: {
+    height: 200,
+    position: "relative",
+    width: 400,
   },
 });
 
-export interface MapProps extends BoxProps {
+export interface MapProps {
   initialCenter: LngLat;
   initialZoom: number;
   postMapInitialize?: (map: mapboxgl.Map) => void;
+  className?: string;
   onUpdate?: (center: LngLat, zoom: number) => void;
   grow?: boolean;
+  interactive?: boolean;
 }
 
 export default function Map({
@@ -42,6 +46,7 @@ export default function Map({
   grow,
   postMapInitialize,
   onUpdate,
+  interactive = true,
   className,
   ...otherProps
 }: MapProps) {
@@ -57,8 +62,8 @@ export default function Map({
   const transformRequest = (url: string): RequestParameters => {
     if (url.startsWith(URL)) {
       return {
-        url,
         credentials: "include",
+        url,
       };
     }
     return { url };
@@ -67,35 +72,31 @@ export default function Map({
   useEffect(() => {
     if (!containerRef.current) return;
     const map = new mapboxgl.Map({
-      container: containerRef.current,
-      style: "mapbox://styles/mapbox/streets-v11",
       center: initialCenter,
-      zoom: initialZoom,
+      container: containerRef.current,
       hash: "loc",
+      interactive: interactive,
+      style: "mapbox://styles/mapbox/streets-v11",
       transformRequest,
+      zoom: initialZoom,
     });
 
-    map.addControl(new mapboxgl.NavigationControl({ showCompass: false }));
+    if (interactive)
+      map.addControl(new mapboxgl.NavigationControl({ showCompass: false }));
 
     if (onUpdate) {
       map.on("moveend", () => onUpdate(map.getCenter(), map.getZoom()));
     }
 
     if (postMapInitialize) postMapInitialize(map);
-  }, []); // eslint-disable-line
+  }, [initialCenter, initialZoom, interactive, onUpdate, postMapInitialize]);
 
   return (
-    <>
-      <Box
-        className={classNames(
-          classes.root,
-          { [classes.grow]: grow },
-          className
-        )}
-        {...otherProps}
-      >
-        <div className={classes.map} ref={containerRef} />
-      </Box>
-    </>
+    <div
+      className={classNames(classes.root, { [classes.grow]: grow }, className)}
+      {...otherProps}
+    >
+      <div className={classes.map} ref={containerRef} />
+    </div>
   );
 }

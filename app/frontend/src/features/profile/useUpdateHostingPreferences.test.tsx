@@ -1,12 +1,11 @@
 import { renderHook } from "@testing-library/react-hooks";
+import useUpdateHostingPreferences from "features/profile/useUpdateHostingPreferences";
+import useCurrentUser from "features/userQueries/useCurrentUser";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { act } from "react-test-renderer";
-
-import { service } from "../../service";
-import wrapper from "../../test/hookWrapper";
-import { addDefaultUser } from "../../test/utils";
-import useCurrentUser from "../userQueries/useCurrentUser";
-import useUpdateHostingPreferences from "./useUpdateHostingPreferences";
+import { service } from "service/index";
+import wrapper from "test/hookWrapper";
+import { addDefaultUser } from "test/utils";
 
 const getUserMock = service.user.getUser as jest.Mock;
 const updateHostingPreferenceMock = service.user
@@ -16,12 +15,12 @@ describe("useUpdateHostingPreference hook", () => {
   const newHostingPreferenceData = {
     acceptsKids: false,
     acceptsPets: false,
-    lastMinute: true,
-    wheelchairAccessible: true,
-    maxGuests: null,
     area: "",
     houseRules: "",
+    lastMinute: true,
+    maxGuests: null,
     smokingAllowed: 1,
+    wheelchairAccessible: true,
   };
 
   it("updates the store with the latest user hosting preference", async () => {
@@ -50,8 +49,8 @@ describe("useUpdateHostingPreference hook", () => {
     });
     const { result, waitFor } = renderHook(
       () => ({
-        mutate: useUpdateHostingPreferences(),
         currentUser: useCurrentUser(),
+        mutate: useUpdateHostingPreferences(),
       }),
       { wrapper }
     );
@@ -76,12 +75,12 @@ describe("useUpdateHostingPreference hook", () => {
     expect(result.current.currentUser.data).toMatchObject({
       acceptsKids: { value: false },
       acceptsPets: { value: false },
-      lastMinute: { value: true },
-      wheelchairAccessible: { value: true },
-      maxGuests: { value: null },
       area: { value: "" },
       houseRules: { value: "" },
+      lastMinute: { value: true },
+      maxGuests: { value: null },
       smokingAllowed: 1,
+      wheelchairAccessible: { value: true },
     });
     // Rest of profile should be the same as before
     expect(result.current.currentUser.data).toMatchObject(defaultUser);

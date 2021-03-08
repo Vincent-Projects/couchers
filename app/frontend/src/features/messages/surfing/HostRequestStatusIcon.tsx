@@ -1,16 +1,15 @@
 import { Avatar, AvatarProps, makeStyles } from "@material-ui/core";
 import classNames from "classnames";
+import { CheckIcon, CrossIcon, QuestionIcon } from "components/Icons";
+import { HostRequestStatus } from "pb/conversations_pb";
+import { HostRequest } from "pb/requests_pb";
 import React from "react";
-
-import { CheckIcon, CrossIcon, QuestionIcon } from "../../../components/Icons";
-import { HostRequestStatus } from "../../../pb/conversations_pb";
-import { HostRequest } from "../../../pb/requests_pb";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
-    width: 18,
-    height: 18,
     fontSize: theme.typography.pxToRem(16),
+    height: 18,
+    width: 18,
   },
 }));
 

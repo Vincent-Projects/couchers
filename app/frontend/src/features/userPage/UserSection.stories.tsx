@@ -1,10 +1,9 @@
 import { Meta, Story } from "@storybook/react";
-
-import UserSection from "./UserSection";
+import UserSection from "features/userPage/UserSection";
 
 export default {
-  title: "Profile/UserSection",
   component: UserSection,
+  title: "Profile/UserSection",
 } as Meta;
 
 const Template: Story<any> = (args) => (

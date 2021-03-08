@@ -18,9 +18,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "auto",
   },
   logInLink: {
-    textDecoration: "none",
     color: theme.palette.secondary.main,
     fontWeight: 700,
+    textDecoration: "none",
   },
 }));
 
@@ -73,6 +73,11 @@ export default function Signup() {
           </Route>
           <Route path={`${signupRoute}/:urlToken?`}>
             <AuthHeader>Your basic details</AuthHeader>
+            {error && (
+              <Alert className={authClasses.errorMessage} severity="error">
+                {error}
+              </Alert>
+            )}
             <CompleteSignupForm />
           </Route>
         </Switch>

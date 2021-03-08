@@ -1,11 +1,10 @@
 import { Meta, Story } from "@storybook/react";
-
-import { user1 } from "../../stories/__mocks__/service";
-import SearchResult from "./SearchResult";
+import SearchResult from "features/search/SearchResult";
+import users from "test/fixtures/users.json";
 
 export default {
-  title: "Search/SearchResult",
   component: SearchResult,
+  title: "Search/SearchResult",
 } as Meta;
 
 const Template: Story<any> = (args) => (
@@ -16,5 +15,5 @@ const Template: Story<any> = (args) => (
 
 export const searchResult = Template.bind({});
 searchResult.args = {
-  user: user1,
+  user: users[0],
 };

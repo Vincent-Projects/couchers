@@ -1,14 +1,14 @@
 import { InputLabel } from "@material-ui/core";
+import Button from "components/Button";
+import TextBody from "components/TextBody";
+import TextField from "components/TextField";
+import { useAuthContext } from "features/auth/AuthProvider";
+import useAuthStyles from "features/auth/useAuthStyles";
+import { SignupRes } from "pb/auth_pb";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-
-import Button from "../../../components/Button";
-import TextBody from "../../../components/TextBody";
-import TextField from "../../../components/TextField";
-import { SignupRes } from "../../../pb/auth_pb";
-import { service } from "../../../service";
-import { useAuthContext } from "../AuthProvider";
-import useAuthStyles from "../useAuthStyles";
+import { service } from "service/index";
+import { sanitizeName } from "utils/validation";
 
 export default function EmailForm() {
   const { authActions } = useAuthContext();
@@ -26,7 +26,8 @@ export default function EmailForm() {
     setLoading(true);
     authActions.clearError();
     try {
-      const next = await service.auth.createEmailSignup(email);
+      const sanitizedEmail = sanitizeName(email);
+      const next = await service.auth.createEmailSignup(sanitizedEmail);
       switch (next) {
         case SignupRes.SignupStep.EMAIL_EXISTS:
           authActions.authError("That email is already in use.");
@@ -69,8 +70,8 @@ export default function EmailForm() {
         />
         <Button
           classes={{
-            root: authClasses.button,
             label: authClasses.buttonText,
+            root: authClasses.button,
           }}
           color="secondary"
           onClick={onSubmit}

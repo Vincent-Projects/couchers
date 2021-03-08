@@ -1,26 +1,45 @@
 import { Box, Divider, makeStyles, Typography } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Button from "components/Button";
+import {
+  ABOUT_US,
+  COLLABORATIVE,
+  INTRODUCTION,
+  LOGIN,
+  SIGN_UP,
+} from "features/auth/constants";
+import useAuthStyles from "features/auth/useAuthStyles";
 import React from "react";
 import { Link } from "react-router-dom";
+import { loginRoute, signupRoute } from "routes";
 
-import Button from "../../components/Button";
-import { loginRoute, signupRoute } from "../../routes";
 import AuthBg from "./resources/auth-bg.png";
-import useAuthStyles from "./useAuthStyles";
 
 const useStyles = makeStyles((theme) => ({
+  aboutUs: {
+    color: "#2a2a2a",
+    marginTop: "auto",
+  },
+  aboutUsLink: {
+    color: "#2a2a2a",
+    display: "block",
+    textDecoration: "none",
+  },
   authPage: {
-    boxSizing: "border-box",
+    alignItems: "flex-end",
     backgroundColor: "#f3f3f3",
     backgroundImage: `url(${AuthBg})`,
     backgroundPosition: "top center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "contain",
+    boxSizing: "border-box",
     display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-end",
     height: "100vh",
+    justifyContent: "center",
     padding: `${theme.spacing(1, 4)}`,
+  },
+  button: {
+    width: "45%",
   },
   content: {
     display: "flex",
@@ -29,27 +48,15 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     textAlign: "center",
   },
-  title: theme.typography.h1,
-  subtitle: {
-    marginTop: theme.spacing(1),
-  },
   navigation: {
     display: "flex",
     justifyContent: "space-around",
     marginTop: theme.spacing(3),
   },
-  button: {
-    width: "45%",
+  subtitle: {
+    marginTop: theme.spacing(1),
   },
-  aboutUs: {
-    marginTop: "auto",
-    color: "#2a2a2a",
-  },
-  aboutUsLink: {
-    textDecoration: "none",
-    display: "block",
-    color: "#2a2a2a",
-  },
+  title: theme.typography.h1,
 }));
 
 export default function AuthPage() {
@@ -59,9 +66,9 @@ export default function AuthPage() {
   return (
     <Box className={classes.authPage}>
       <Box className={classes.content}>
-        <Typography variant="h1">Connect with the world around you</Typography>
+        <Typography variant="h1">{INTRODUCTION}</Typography>
         <Typography classes={{ root: classes.subtitle }}>
-          Build collaboratively and always free
+          {COLLABORATIVE}
         </Typography>
         <Divider classes={{ root: authClasses.divider }} flexItem />
         <Box className={classes.navigation}>
@@ -69,28 +76,28 @@ export default function AuthPage() {
             component={Link}
             to={loginRoute}
             classes={{
-              root: `${authClasses.button} ${classes.button}`,
               label: authClasses.buttonText,
+              root: `${authClasses.button} ${classes.button}`,
             }}
             color="secondary"
           >
-            Login
+            {LOGIN}
           </Button>
           <Button
             component={Link}
             to={signupRoute}
             classes={{
-              root: `${authClasses.button} ${classes.button}`,
               label: authClasses.buttonText,
+              root: `${authClasses.button} ${classes.button}`,
             }}
             color="secondary"
           >
-            Sign up
+            {SIGN_UP}
           </Button>
         </Box>
         <Box className={classes.aboutUs}>
           <Typography className={classes.aboutUsLink} component={Link} to="#">
-            About us
+            {ABOUT_US}
           </Typography>
           <ExpandMoreIcon />
         </Box>

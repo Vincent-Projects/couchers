@@ -1,17 +1,14 @@
-import { Box } from "@material-ui/core";
-import classNames from "classnames";
+import Button from "components/Button";
+import TextField from "components/TextField";
+import useAuthStore from "features/auth/useAuthStore";
+import useSendFieldStyles from "features/messages/useSendFieldStyles";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { Error as GrpcError } from "grpc-web";
+import { HostRequestStatus } from "pb/conversations_pb";
+import { HostRequest, RespondHostRequestReq } from "pb/requests_pb";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { UseMutationResult } from "react-query";
-
-import Button from "../../../components/Button";
-import TextField from "../../../components/TextField";
-import { HostRequestStatus } from "../../../pb/conversations_pb";
-import { HostRequest, RespondHostRequestReq } from "../../../pb/requests_pb";
-import useAuthStore from "../../auth/useAuthStore";
-import useSendFieldStyles from "../useSendFieldStyles";
 
 interface MessageFormData {
   text: string;
@@ -79,9 +76,9 @@ export default function HostRequestSendField({
   const handleStatus = (status: HostRequestStatus) =>
     handleSubmit(async (data: MessageFormData) => {
       handleRespond({
-        text: data.text,
         hostRequestId: hostRequest.hostRequestId,
         status,
+        text: data.text,
       });
       reset();
     });
@@ -101,8 +98,8 @@ export default function HostRequestSendField({
   const isButtonLoading = isLoading || isResponseLoading;
 
   return (
-    <form onSubmit={onSubmit} className={classNames(classes.root)}>
-      <Box className={classes.buttonContainer}>
+    <form onSubmit={onSubmit}>
+      <div className={classes.buttonContainer}>
         {isHost ? (
           <>
             {(hostRequest.status ===
@@ -147,8 +144,8 @@ export default function HostRequestSendField({
             )}
           </>
         )}
-      </Box>
-      <Box className={classes.container}>
+      </div>
+      <div className={classes.container}>
         <TextField
           id="host-request-message"
           label="Message"
@@ -163,7 +160,7 @@ export default function HostRequestSendField({
         <FieldButton callback={onSubmit} isLoading={isButtonLoading}>
           Send
         </FieldButton>
-      </Box>
+      </div>
     </form>
   );
 }

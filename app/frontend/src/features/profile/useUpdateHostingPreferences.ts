@@ -1,9 +1,8 @@
+import { useAuthContext } from "features/auth/AuthProvider";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { useMutation, useQueryClient } from "react-query";
-
-import { HostingPreferenceData, service } from "../../service";
-import { SetMutationError } from "../../utils/types";
-import { useAuthContext } from "../auth/AuthProvider";
+import { HostingPreferenceData, service } from "service/index";
+import { SetMutationError } from "utils/types";
 
 interface UpdateHostingPreferencesVariables {
   preferenceData: HostingPreferenceData;
@@ -21,17 +20,17 @@ export default function useUpdateHostingPreferences() {
     ({ preferenceData }) =>
       service.user.updateHostingPreference(preferenceData),
     {
+      onError: (error, { setMutationError }) => {
+        setMutationError(error.message);
+      },
       onMutate: async ({ setMutationError }) => {
         setMutationError(null);
       },
       onSuccess: () => {
         queryClient.invalidateQueries(["user", userId]);
       },
-      onError: (error, { setMutationError }) => {
-        setMutationError(error.message);
-      },
     }
   );
 
-  return { updateHostingPreferences, status, reset };
+  return { reset, status, updateHostingPreferences };
 }

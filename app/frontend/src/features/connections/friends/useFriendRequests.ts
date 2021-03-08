@@ -1,9 +1,8 @@
+import useUsers from "features/userQueries/useUsers";
 import { Error } from "grpc-web";
+import { ListFriendRequestsRes } from "pb/api_pb";
 import { useQuery } from "react-query";
-
-import { ListFriendRequestsRes } from "../../../pb/api_pb";
-import { service } from "../../../service";
-import useUsers from "../../userQueries/useUsers";
+import { service } from "service/index";
 
 export default function useFriendRequests(
   friendRequestType: "Sent" | "Received"
@@ -44,9 +43,9 @@ export default function useFriendRequests(
       : void 0;
 
   return {
-    isError: !!errors.length,
-    isLoading,
     data,
     errors,
+    isError: !!errors.length,
+    isLoading,
   };
 }

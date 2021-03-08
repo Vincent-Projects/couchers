@@ -1,30 +1,30 @@
-import { Box, BoxProps, makeStyles, useTheme } from "@material-ui/core";
+import { BoxProps, makeStyles, useTheme } from "@material-ui/core";
 import classNames from "classnames";
+import Alert from "components/Alert";
+import Map from "components/Map";
+import MapSearch from "components/MapSearch";
 import {
   GeoJSONSource,
   LngLat,
   MapMouseEvent,
   MapTouchEvent,
 } from "maplibre-gl";
+import { User } from "pb/api_pb";
 import React, { useRef, useState } from "react";
 
 import { userLocationMaxRadius, userLocationMinRadius } from "../constants";
-import { User } from "../pb/api_pb";
-import Alert from "./Alert";
-import Map from "./Map";
-import MapSearch from "./MapSearch";
 
 const handleRadius = 10;
 
 const useStyles = makeStyles({
-  root: {
-    position: "relative",
-    height: 200,
-    width: 400,
-  },
   grow: {
-    width: "100%",
     height: "100%",
+    width: "100%",
+  },
+  root: {
+    height: 200,
+    position: "relative",
+    width: 400,
   },
 });
 
@@ -189,34 +189,34 @@ export default function EditUserLocationMap({
       ]);
 
       map.current!.addSource("handle", {
-        type: "geojson",
         data: pointGeoJson(handleCoords.current),
+        type: "geojson",
       });
 
       map.current!.addSource("circle", {
-        type: "geojson",
         data: circleGeoJson(centerCoords.current!, radius.current!),
+        type: "geojson",
       });
 
       map.current!.addLayer({
         id: "handle",
-        type: "circle",
-        source: "handle",
         paint: {
-          "circle-radius": handleRadius,
           "circle-color": theme.palette.primary.main,
+          "circle-radius": handleRadius,
         },
+        source: "handle",
+        type: "circle",
       });
 
       map.current!.addLayer({
         id: "circle",
-        type: "fill",
-        source: "circle",
         layout: {},
         paint: {
           "fill-color": theme.palette.primary.main,
           "fill-opacity": 0.5,
         },
+        source: "circle",
+        type: "fill",
       });
 
       //if no user is specified, ask to get the location from browser
@@ -290,7 +290,7 @@ export default function EditUserLocationMap({
   return (
     <>
       {error && <Alert severity="error">{error}</Alert>}
-      <Box
+      <div
         className={classNames(
           classes.root,
           { [classes.grow]: grow },
@@ -310,7 +310,7 @@ export default function EditUserLocationMap({
           setValue={setCity}
           setMarker={flyToSearch}
         />
-      </Box>
+      </div>
     </>
   );
 }
@@ -319,17 +319,17 @@ function pointGeoJson(
   coords: LngLat
 ): GeoJSON.FeatureCollection<GeoJSON.Geometry> {
   return {
-    type: "FeatureCollection",
     features: [
       {
-        type: "Feature",
-        properties: {},
         geometry: {
-          type: "Point",
           coordinates: coords.toArray(),
+          type: "Point",
         },
+        properties: {},
+        type: "Feature",
       },
     ],
+    type: "FeatureCollection",
   };
 }
 
@@ -338,13 +338,9 @@ function circleGeoJson(
   radius: number
 ): GeoJSON.FeatureCollection<GeoJSON.Geometry> {
   return {
-    type: "FeatureCollection",
     features: [
       {
-        type: "Feature",
-        properties: {},
         geometry: {
-          type: "Polygon",
           //create a circle of 60 points
           coordinates: [
             [
@@ -360,9 +356,13 @@ function circleGeoJson(
               displaceLngLat(coords, radius, 0).toArray(),
             ],
           ],
+          type: "Polygon",
         },
+        properties: {},
+        type: "Feature",
       },
     ],
+    type: "FeatureCollection",
   };
 }
 

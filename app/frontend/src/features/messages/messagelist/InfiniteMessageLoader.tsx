@@ -1,22 +1,21 @@
 import { Box, makeStyles } from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import classNames from "classnames";
+import CircularProgress from "components/CircularProgress";
+import { messageElementId } from "features/messages/messagelist/MessageView";
 import React, { ReactNode, useCallback, useLayoutEffect, useRef } from "react";
-
-import useOnVisibleEffect from "../useOnVisibleEffect";
-import { messageElementId } from "./MessageView";
+import useOnVisibleEffect from "utils/useOnVisibleEffect";
 
 const useStyles = makeStyles((theme) => ({
   loader: {
-    width: "100%",
-    position: "absolute",
-    top: 0,
-    paddingTop: theme.spacing(1),
     "& > *": {
       display: "block",
-      marginInlineStart: "auto",
       marginInlineEnd: "auto",
+      marginInlineStart: "auto",
     },
+    paddingTop: theme.spacing(1),
+    position: "absolute",
+    top: 0,
+    width: "100%",
   },
   scroll: {
     ...theme.shape.scrollBar,

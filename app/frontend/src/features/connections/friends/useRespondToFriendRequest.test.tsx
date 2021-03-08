@@ -1,10 +1,9 @@
 import { act, renderHook } from "@testing-library/react-hooks";
+import useRespondToFriendRequest from "features/connections/friends/useRespondToFriendRequest";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
-
-import { ListFriendRequestsRes } from "../../../pb/api_pb";
-import { service } from "../../../service";
-import { getHookWrapperWithClient } from "../../../test/hookWrapper";
-import useRespondToFriendRequest from "./useRespondToFriendRequest";
+import { ListFriendRequestsRes } from "pb/api_pb";
+import { service } from "service/index";
+import { getHookWrapperWithClient } from "test/hookWrapper";
 
 const respondToFriendRequestMock = service.api
   .respondFriendRequest as jest.Mock<
@@ -25,7 +24,6 @@ describe("useRespondToFriendRequest hook", () => {
     client.setQueryData<ListFriendRequestsRes.AsObject>(
       "friendRequestsReceived",
       {
-        sentList: [],
         receivedList: [
           {
             friendRequestId: 1,
@@ -33,6 +31,7 @@ describe("useRespondToFriendRequest hook", () => {
             userId: 2,
           },
         ],
+        sentList: [],
       }
     );
     client.setQueryData<number[]>("friendIds", []);

@@ -1,13 +1,12 @@
 import { Box, BoxProps } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import TextBody from "components/TextBody";
+import ControlMessageView from "features/messages/messagelist/ControlMessageView";
+import MessageView from "features/messages/messagelist/MessageView";
+import { isControlMessage } from "features/messages/utils";
+import { Message } from "pb/conversations_pb";
 import * as React from "react";
-
-import TextBody from "../../../components/TextBody";
-import { Message } from "../../../pb/conversations_pb";
-import { isControlMessage } from "../utils";
-import ControlMessageView from "./ControlMessageView";
-import MessageView from "./MessageView";
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -15,10 +14,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column-reverse",
   },
   message: {
-    marginBottom: theme.spacing(2),
     "&:nth-child(1)": {
       marginBottom: 0,
     },
+    marginBottom: theme.spacing(2),
   },
 }));
 
